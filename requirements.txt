@@ -5,3 +5,5 @@ spacy
 requests
 faster-whisper
 assemblyai
+python-dotenv
+openai
