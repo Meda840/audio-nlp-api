@@ -11,6 +11,13 @@ venv/
 .env/
 .venv/
 
+# Audio data (raw + processed)
+data/audio/raw/
+data/audio/processed/
+
+# Transcripts
+data/transcripts/
+
 # IDE / Editor
 .vscode/
 .idea/
