@@ -4,3 +4,6 @@ ffmpeg-python
 spacy
 requests
 faster-whisper
+assemblyai
+python-dotenv
+openai

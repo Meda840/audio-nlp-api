@@ -5,9 +5,9 @@ from faster_whisper import WhisperModel
 PROCESSED_DIR = "data/audio/processed"
 TRANSCRIPT_DIR = "data/transcripts"
 
-def transcribe_audio(filename: str, model_size="small") -> str:
+def transcribe_audio(filename: str, model_size="medium") -> str:
     os.makedirs(TRANSCRIPT_DIR, exist_ok=True)
-
+    print("🚀 Starting transcription...")
     input_path = os.path.join(PROCESSED_DIR, f"{filename}.wav")
     output_path = os.path.join(TRANSCRIPT_DIR, f"{filename}.txt")
 
