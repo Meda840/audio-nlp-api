@@ -1,11 +1,13 @@
 import requests
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, BackgroundTasks
 from pydantic import BaseModel
 from service.download import download_audio
 from service.convert import convert_to_wav
 from service.transcribe import transcribe_audio
 from service.transcribeAssembly import transcribe_with_assemblyai
 from service.extract_infos import extract_infos_from_text
+import traceback
+
 
 app = FastAPI()
 PHP_API_URL = "http://ghandi.local/fiche_ai_data_post.php"
@@ -65,13 +67,13 @@ def send_ai_data_to_php(fiche_id: int, extracted_data: dict) -> dict:
         "client_first_name_data_ia": extracted_data.get("client_first_name_data_ia", None),
         "client_last_name_data_ia": extracted_data.get("client_last_name_data_ia", None),
         "client_phone_number": extracted_data.get("client_phone_number", None),
-        "client_city_data_ia": extracted_data.get("client_city_data_ia", None),
+        "client_city_data_ia": extracted_data.get("ville", None),
         "client_address_data_ia": extracted_data.get("adresse", None),
         "client_postal_code_data_ia": extracted_data.get("code_postal", None),
         "proprietaire_data_ia": extracted_data.get("proprietaire", None),
         "mode_chauffage_data_ia": extracted_data.get("mode_chauffage", None),
-        "facture_data_ia": extracted_data.get("facture_plus_100euros", None),
-        "mensuelle_annuelle_data_ia": extracted_data.get("mensuelle_annuelle", None),
+        "facture_data_ia": extracted_data.get("facture_electricite", None),
+        "mensuelle_annuelle_data_ia": extracted_data.get("type_facturation", None),
         "superficie_data_ia": extracted_data.get("superficie_maison", None),
         "toiture_data_ia": extracted_data.get("toiture",None),
         "orientation_data_ia": extracted_data.get("orientation", None),
@@ -99,3 +101,50 @@ def send_ai_data_to_php(fiche_id: int, extracted_data: dict) -> dict:
     except json.JSONDecodeError:
         raise HTTPException(status_code=500, detail="PHP backend returned invalid JSON")
 
+def process_fiche_in_background(fiche_id: int, audio_url: str):
+    try:
+        print(f"🎧 Processing fiche {fiche_id} in background...")
+
+        filename = f"{fiche_id}_audiotranscribed"
+
+        # Step 1: Download
+        raw_path = download_audio(audio_url, filename)
+
+        # Step 2: Convert to WAV
+        wav_path = convert_to_wav(raw_path, filename)
+
+        # Step 3: Transcribe
+        transcript_path = transcribe_with_assemblyai(filename)
+
+        # Step 4: Read transcript
+        with open(transcript_path, "r", encoding="utf-8") as f:
+            transcript_text = f.read()
+
+        # Step 5: Extract infos with OpenAI
+        extracted_infos = extract_infos_from_text(transcript_text)
+
+        # Step 6: Send to PHP backend
+        backend_response = send_ai_data_to_php(fiche_id, extracted_infos)
+
+        print(f"✅ Background processing finished for fiche {fiche_id}")
+        print(f"➡️ PHP backend response: {backend_response}")
+
+    except Exception as e:
+        print(f"❌ Error processing fiche {fiche_id}: {e}")
+
+# ✅ Main endpoint — triggers background task
+@app.post("/process")
+def download_file(request: DownloadRequest, background_tasks: BackgroundTasks):
+    fiche_id = request.fiche_id
+    audio_url = request.audio_url
+
+    print(f"📥 Queuing fiche {fiche_id} for background processing...")
+
+    # Schedule background task
+    background_tasks.add_task(process_fiche_in_background, fiche_id, audio_url)
+
+    return {
+        "status": "queued",
+        "fiche_id": fiche_id,
+        "message": "Processing started in background. Results will be sent to PHP when ready."
+    }
