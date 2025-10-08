@@ -44,7 +44,7 @@ def download_file(request: DownloadRequest):
     # Step 6: Send to PHP backend
     backend_response = send_ai_data_to_php(fiche_id, extracted_infos)
 
-# Step 7: Return summary
+    # Step 7: Return summary
     return {
         "status": "success",
         "fiche_id": fiche_id,
