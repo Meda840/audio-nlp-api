@@ -19,7 +19,7 @@ def extract_infos_from_text(transcript: str) -> dict:
     Utilise les indices du dialogue pour déduire les informations implicites.
     Si une information est absente, écris "inconnu".
 
-    ### 🧾 Informations à extraire :
+    ## Informations à extraire :
 
     - proprietaire : "oui" / "non"
     - situation_familiale : "celibataire" / "en couple" / "veuf" / "divorce" / "inconnu"
@@ -92,7 +92,6 @@ def extract_infos_from_text(transcript: str) -> dict:
     )
 
     content = response.choices[0].message.content.strip()
-    #cleaned = clean_json_output(content)
 
     try:
         data = json.loads(content)

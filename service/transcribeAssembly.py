@@ -1,12 +1,16 @@
 # Install the assemblyai package by executing the command "pip install assemblyai"
 import os
 import assemblyai as aai
+from dotenv import load_dotenv
 
 PROCESSED_DIR = "data/audio/processed"
 TRANSCRIPTS_DIR = "data/transcripts"
+# Charger le fichier .env
+load_dotenv()
+API_KEY = os.getenv("ASSEMBLY_AI_KEY")
 
 # Configure API key
-aai.settings.api_key = "2297e5a8f2e645f9b431115543ea8304"
+aai.settings.api_key = API_KEY
 
 def transcribe_with_assemblyai(filename: str) -> str:
     """
@@ -32,7 +36,7 @@ def transcribe_with_assemblyai(filename: str) -> str:
         format_text=True,
         punctuate=True,
         speech_model=aai.SpeechModel.best,
-        language_code="fr"  # French transcription
+        language_code="fr"  
     )
 
     # Run transcription
