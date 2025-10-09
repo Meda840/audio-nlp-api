@@ -96,6 +96,7 @@ def extract_infos_from_text(transcript: str) -> dict:
     )
 
     content = response.choices[0].message.content.strip()
+    print(f"------------------- reponse of gpt {content} ...")
 
     try:
         data = json.loads(content)
