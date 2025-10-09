@@ -81,6 +81,8 @@ def extract_infos_from_text(transcript: str) -> dict:
     - Le script sert de repère : si une information est implicite (ex: montant de facture typique), infère-la.
     - Si orientation ou surface du toit ne sont pas claires → "inconnu" proprement, ne pas inventer.
     - Pour facture : applique strictement la règle mensuelle/annuelle selon montant.
+    - Si conjoint est mentionnée comme propriétaire (ex : “c’est madame”), considérer `proprietaire = "oui"`.
+    - Si le locuteur mentionne “madame”, “mon mari”, “ma femme” → `situation_familiale = "en couple"`.
     - Répondre en JSON valide uniquement.
 
     Transcription à analyser :
