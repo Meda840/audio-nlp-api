@@ -44,7 +44,7 @@ def extract_infos_from_text(transcript: str) -> dict:
     Ta mission :
     - Lire la transcription ci-dessous
     - Inférer les réponses même implicites en t’appuyant sur le script et le contexte typique de ces appels
-    - Répondre en **JSON strict** (aucun texte autour)
+    - Réponds toujours en JSON valide **sans markdown, sans texte explicatif**, avec les clés en snake_case.
     - Remplir les champs demandés ci-dessous avec les valeurs attendues
 
     ## Champs à extraire :
