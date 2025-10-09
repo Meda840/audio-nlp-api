@@ -53,8 +53,8 @@ def extract_infos_from_text(transcript: str) -> dict:
     - age_monsieur : nombre / "<70" / ">70" / "-"
     - age_madame : nombre / "<70" / ">70" / "-"
     - superficie_maison : nombre (m²) ou "-"
-    - mode_chauffage : texte exact
-    - facture_electricite : montant en nombre si mentionné, sinon "plus_de_100", "moins_de_100" ou "-"
+    - mode_chauffage : texte exact Si la transcription contient une faute ou un mot proche d’un type valide, corrige-le vers le terme exact.
+    - facture_electricite : montant en nombre si mentionné, sinon "plus_de_100","entre 80 et 100" "moins_de_80" ou "-"
     - type_facturation : 
         - "mensuelle" si le montant < 300 €,
         - "annuelle" si le montant ≥ 300 €,
