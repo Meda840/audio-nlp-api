@@ -8,6 +8,7 @@ from service.transcribeAssembly import transcribe_with_assemblyai
 from service.extract_infos import extract_infos_from_text
 import traceback
 from dotenv import load_dotenv
+import os
 
 
 app = FastAPI()
