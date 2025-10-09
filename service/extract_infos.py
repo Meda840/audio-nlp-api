@@ -70,7 +70,11 @@ def extract_infos_from_text(transcript: str) -> dict:
     - adresse : texte complet si mentionné
     - code_postal : nombre de xxxxx ou "-"
     - ville : nom si identifiable
-    - activite_monsieur : voir règles dans le script
+    - activite_monsieur : voir règles dans le script.Si salarié repondre CDI, Si "libéral" ou "indépendant", inclure ancienneté : 
+        - Si le client mentionne "libéral" ou "indépendant", vérifier si le transcript indique depuis combien de temps.
+        - Si 3 ans ou plus → renvoyer "indépendant (plus de 3 ans)"
+        - Si moins de 3 ans → renvoyer "indépendant (moins de 3 ans)"
+        - Si aucune info sur la durée → renvoyer "indépendant"
     - activite_madame : même logique
     - revenu : montant mensuel si mentionné, sinon "-"
     - tel2 : autre numéro mentionné, sinon "-"
