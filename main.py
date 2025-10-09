@@ -7,10 +7,12 @@ from service.transcribe import transcribe_audio
 from service.transcribeAssembly import transcribe_with_assemblyai
 from service.extract_infos import extract_infos_from_text
 import traceback
+from dotenv import load_dotenv
 
 
 app = FastAPI()
-PHP_API_URL = "http://ghandi.local/fiche_ai_data_post.php"
+load_dotenv()
+PHP_API_URL = os.getenv("php_api_url")
 
 @app.get("/health")
 def health_check():
