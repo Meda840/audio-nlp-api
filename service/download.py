@@ -1,3 +1,4 @@
+  GNU nano 7.2                                           download.py                                                     
 import os
 import requests
 
@@ -5,7 +6,7 @@ DATA_DIR = "data/audio/raw"
 
 def download_audio(url: str, filename: str) -> str:
     os.makedirs(DATA_DIR, exist_ok=True)
-
+    url.replace("/MP3/", "/ORIG/").replace(".mp3", ".wav")
     ext = os.path.splitext(url)[1]  # get extension from url (.mp3 or .wav)
     if ext not in [".mp3", ".wav"]:
         raise ValueError("Unsupported file type")
@@ -23,3 +24,4 @@ def download_audio(url: str, filename: str) -> str:
         raise ValueError("Downloaded file is empty")
 
     return filepath
+
