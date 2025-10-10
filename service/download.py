@@ -11,12 +11,18 @@ def download_audio(url: str, filename: str) -> str:
     if ext not in [".mp3", ".wav"]:
         raise ValueError("Unsupported file type")
 
-    # If it's an MP3, convert to original WAV URL
+     # Build ORIG URL based on extension
     if ext == ".mp3":
         orig_url = url.replace("/MP3/", "/ORIG/").replace(".mp3", ".wav")
-        ext = ".wav"  # update extension
+        ext = ".wav"  # force WAV extension
+    elif ext == ".wav":
+        # Insert /ORIG/ if not already in URL
+        if "/ORIG/" not in url:
+            orig_url = url.replace("/RECORDINGS/", "/RECORDINGS/ORIG/")
+        else:
+            orig_url = url
     else:
-        orig_url = url  # keep original URL
+        orig_url = url
 
     filepath = os.path.join(DATA_DIR, filename + ext)
 
