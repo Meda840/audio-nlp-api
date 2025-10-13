@@ -73,6 +73,7 @@ def send_ai_data_to_php(fiche_id: int, extracted_data: dict) -> dict:
         "client_city_data_ia": extracted_data.get("ville", None),
         "client_address_data_ia": extracted_data.get("adresse", None),
         "client_postal_code_data_ia": extracted_data.get("code_postal", None),
+        "adresse_modifiee": extracted_data.get("adresse_modifiee", None),
         "proprietaire_data_ia": extracted_data.get("proprietaire", None),
         "mode_chauffage_data_ia": extracted_data.get("mode_chauffage", None),
         "facture_data_ia": extracted_data.get("facture_electricite", None),
