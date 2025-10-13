@@ -47,6 +47,19 @@ def extract_infos_from_text(transcript: str) -> dict:
     - Réponds toujours en JSON valide **sans markdown, sans texte explicatif**, avec les clés en snake_case.
     - Remplir les champs demandés ci-dessous avec les valeurs attendues
 
+     ## Règles pour le commentaire_suggestion_ia :
+    - Toujours suivre cet ordre et séparateur " / " :
+      script ok / verrouillage ok / proprietaire oui/non / facture (montant ou estimation) / superficie (m²) / toit (type) / orientation / espace_20m2 / age_mr / age_mme / activite_mr / activite_mme / revenu / Q_interet / adresse / note / observation
+    - Si une information est absente → mettre "-"
+    - Ne rien inventer, se baser uniquement sur la transcription
+    - Reformuler les fautes ou termes approximatifs pour avoir un texte clair
+    - Indiquer si l'appel semble intéressant, moyennement intéressant, ou non intéressant
+    - Les observations peuvent inclure : obstacles sur le toit, informations manquantes, particularités du client, etc.
+     ## Exemples de commentaire_suggestion_ia :
+    1. script ok / verrouillage ok / proprietaire oui / facture 700£ / superficie 500M² / toit en ardoise / orientation plein sud / 20M² oui / mr 60 et mme 60 / mr et mme liberaux plus de 3 ans / revenu sup à 2000£ / Q d'interet mr dit oui / adresse 24 rue Belle Epine, 37700 Tours / note 10 / mr semble moyennement intéressé
+    2. script ok / verrouillage ok / proprietaire oui / facture 120£ / superficie 130M² / toit plat / orientation bien ensoleillée / 20M² non / mr 40 et mme 34 / mr et mme en cdi / revenu estimé "-" / Q d'interet mr dit d'accord / adresse 1 Chemin Youri Gagarine, 49500 Segré-en-Anjou Bleu / note 1 / mr semble intéressé
+    3. script ok / verrouillage ok / proprietaire oui / facture "-" / superficie 300 M² / toit en ardoise / orientation sud / 20M² oui / mr 72 et mme 52 / mr retraité et mme fonctionnaire / revenu sup à 1600£ / Q d'interet mr dit oui / adresse 32 Route de Castillon, 09200 Moulis / note 8 / mr semble intéressé
+
     ## Champs à extraire :
     - proprietaire : "oui" / "non"
     - situation_familiale : "celibataire" / "en couple" / "veuf" / "divorce" / "-"
@@ -80,7 +93,7 @@ def extract_infos_from_text(transcript: str) -> dict:
     - tel2 : autre numéro mentionné, sinon "-"
     - creneau_rappel : si le client donne une préférence (matin, après-midi…)
     - heure_rappel : si une heure précise est mentionnée
-
+    - commentaire_suggestion_ia : suivre Règles pour le commentaire_suggestion_ia et les exemples donnés
      Astuce pour toi :
     - Le script sert de repère : si une information est implicite (ex: montant de facture typique), infère-la.
     - Si orientation ou surface du toit ne sont pas claires → "inconnu" proprement, ne pas inventer.
