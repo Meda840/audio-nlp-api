@@ -107,6 +107,8 @@ def extract_infos_from_text(transcript: str) -> dict:
     - Pour facture : applique strictement la règle mensuelle/annuelle selon montant.
     - Si conjoint est mentionnée comme propriétaire (ex : “c’est madame”), considérer `proprietaire = "oui"`.
     - Si le locuteur mentionne “madame”, “mon mari”, “ma femme” → `situation_familiale = "en couple"`.
+    - Si le client dit explicitement “ce n’est pas mon adresse”, “j’ai déménagé”, “c’est l’ancienne adresse”, ou corrige une rue, un numéro ou une ville → `adresse_modifiee = 1`.
+    - Si le client confirme l’adresse telle que dite → `adresse_modifiee = 0`.
     - Répondre en JSON valide uniquement.
 
     Transcription à analyser :
