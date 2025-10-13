@@ -9,12 +9,12 @@ if not logger.handlers:
     ch.setFormatter(logging.Formatter('[%(asctime)s] %(levelname)s: %(message)s'))
     logger.addHandler(ch)
 
-def cleanup_audio_files( raw_dir: str = "data/audio/raw",processed_dir: str = "data/audio/processed",older_than_hours: int = 6) -> None:
+def cleanup_audio_files( raw_dir: str = "data/audio/raw",processed_dir: str = "data/audio/processed",older_than_hours: int = 2) -> None:
     """
     Delete audio files older than X hours from raw and processed directories.
     Logs success and failures without interrupting workflow.
     """
-
+    print("hello")
     cutoff_time = datetime.now().timestamp() - (older_than_hours * 3600)
     dirs = [raw_dir, processed_dir]
 

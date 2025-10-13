@@ -83,6 +83,13 @@ def extract_infos_from_text(transcript: str) -> dict:
     - adresse : texte complet si mentionné
     - code_postal : nombre de xxxxx ou "-"
     - ville : nom si identifiable
+    - adresse_modifiee :
+        Retourner 1 si dans la transcription le client dit ou laisse comprendre que :
+        * l’adresse annoncée par le commercial n’est pas correcte
+        * il a déménagé ou habite ailleurs maintenant
+        * le numéro de rue, la rue ou la ville ne correspondent pas
+        Retourner 0 si aucune contradiction ou changement n’est mentionné
+        Retourner "-" si aucune information claire sur l’adresse
     - activite_monsieur : voir règles dans le script.Si salarié repondre CDI, Si "libéral" ou "indépendant", inclure ancienneté : 
         - Si le client mentionne "libéral" ou "indépendant", vérifier si le transcript indique depuis combien de temps.
         - Si 3 ans ou plus → renvoyer "indépendant (plus de 3 ans)"
