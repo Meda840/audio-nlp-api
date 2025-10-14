@@ -7,3 +7,6 @@ faster-whisper
 assemblyai
 python-dotenv
 openai
+# Silence trimming for audio preprocessing
+webrtcvad==2.0.10
+pydub==0.25.1

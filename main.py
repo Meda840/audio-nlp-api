@@ -6,6 +6,8 @@ from service.convert import convert_to_wav
 from service.transcribe import transcribe_audio
 from service.transcribeAssembly import transcribe_with_assemblyai
 from service.extract_infos import extract_infos_from_text
+from utils.silence_trimmer import trim_silence
+
 import traceback
 from dotenv import load_dotenv
 import os
@@ -113,9 +115,13 @@ def process_fiche_in_background(fiche_id: int, audio_url: str):
 
         # Step 1: Download
         raw_path = download_audio(audio_url, filename)
+        print(raw_path)
 
         # Step 2: Convert to WAV
-        wav_path = convert_to_wav(raw_path, filename)
+        #wav_path = convert_to_wav(raw_path, filename)
+
+        # Step 2.1 : trim audio to cut when audio is silenced
+        wave_path = trim_silence(raw_path)
 
         # Step 3: Transcribe
         transcript_path = transcribe_with_assemblyai(filename)
