@@ -9,6 +9,9 @@ if not logger.handlers:
     ch.setFormatter(logging.Formatter('[%(asctime)s] %(levelname)s: %(message)s'))
     logger.addHandler(ch)
 
+#os.chdir("/home/mohamed-amine/Desktop/audio-nlp-api") local server
+os.chdir("/home/m.elgaouzi/audio-nlp-api") # live server
+
 def cleanup_audio_files( raw_dir: str = "data/audio/raw",processed_dir: str = "data/audio/processed",older_than_hours: int = 2) -> None:
     """
     Delete audio files older than X hours from raw and processed directories.
