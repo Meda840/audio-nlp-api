@@ -98,6 +98,8 @@ def send_ai_data_to_php(fiche_id: int, extracted_data: dict) -> dict:
         "commentaire_client_suggestion_ia": extracted_data.get("commentaire_client_suggestion_ia", None),
     }
 
+    print(f"here is data sent {payload}")
+
     try:
         response = requests.post(url, json=payload, timeout=30)
         response.raise_for_status()
