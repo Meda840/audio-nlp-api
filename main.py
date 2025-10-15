@@ -95,7 +95,16 @@ def send_ai_data_to_php(fiche_id: int, extracted_data: dict) -> dict:
         "heure_rappel_data_ia": extracted_data.get("heure_rappel", None),
         "entretien_data_ia": extracted_data.get("entretien", None),
         "commentaire_suggestion_ia": extracted_data.get("commentaire_suggestion_ia", None),
-        "commentaire_client_suggestion_ia": extracted_data.get("commentaire_client_suggestion_ia", None),
+        "score_interet": extracted_data.get("score_interet", None),
+        "classement": extracted_data.get("classement", None),
+        "interet_exprime": extracted_data.get("interet_exprime", None),
+        "disponibilite": extracted_data.get("disponibilite", None),
+        "infos_collectees": extracted_data.get("infos_collectees", None),
+        "objections": extracted_data.get("objections", None),
+        "extraits_pertinents": extracted_data.get("extraits_pertinents", None),
+        "analyse_agent": extracted_data.get("analyse_agent", None),
+        "recommandations_qualiticien": extracted_data.get("recommandations_qualiticien", None),
+
     }
 
     print(f"here is data sent {payload}")
