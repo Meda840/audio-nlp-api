@@ -101,6 +101,15 @@ def extract_infos_from_text(transcript: str) -> dict:
     - creneau_rappel : si le client donne une préférence (matin, après-midi…)
     - heure_rappel : si une heure précise est mentionnée
     - commentaire_suggestion_ia : suivre Règles pour le commentaire_suggestion_ia et les exemples donnés
+    - score_interet : valeur entre 0 et 5
+    - classement : "Valide" / "A retravailler" / "Non intéressant"
+    - interet_exprime : texte synthèse intérêt prospect
+    - disponibilite : "Oui"/"Non"
+    - infos_collectees : texte résumé des infos collectées
+    - objections : texte résumé objections ou freins
+    - extraits_pertinents : liste de citations pertinentes du transcript
+    - analyse_agent : liste des points observés sur l’agent
+    - recommandations_qualiticien : liste des recommandations pour le qualiticien
      Astuce pour toi :
     - Le script sert de repère : si une information est implicite (ex: montant de facture typique), infère-la.
     - Si orientation ou surface du toit ne sont pas claires → "inconnu" proprement, ne pas inventer.
@@ -109,7 +118,33 @@ def extract_infos_from_text(transcript: str) -> dict:
     - Si le locuteur mentionne “madame”, “mon mari”, “ma femme” → `situation_familiale = "en couple"`.
     - Si le client dit explicitement “ce n’est pas mon adresse”, “j’ai déménagé”, “c’est l’ancienne adresse”, ou corrige une rue, un numéro ou une ville → `adresse_modifiee = 1`.
     - Si le client confirme l’adresse telle que dite → `adresse_modifiee = 0`.
-    - Répondre en JSON valide uniquement.
+    ## Exemple de sortie attendue :
+    
+        "score_interet": "4.0 / 5",
+        "classement": "Valide",
+        "interet_exprime": "Intéressé par projet éco-financé, attentif aux détails || Réceptive, souhaite vérifier faisabilité",
+        "disponibilite": "Prêt à être rappelé par conseiller || Accepte d’être rappelée — mais méfiante",
+        "infos_collectees": "Maison 90 m², chauffage électrique, orientation Est, espace toiture ~20 m² dégagé, facture >100 €, 2 niveaux",
+        "objections": "Conflit antérieur avec pompe à chaleur / primes d'État → rassurer sur fiabilité || Pas intéressés / pas envie de répondre",
+        "extraits_pertinents": [
+            "Facture >100€/mois, maison 90 m², chauffage électrique, orientation Est.",
+            "Espace toiture ~20 m² dégagé, sans velux, sans ombrage.",
+            "Préoccupation antérieure sur primes pompe à chaleur → ton rassurant.",
+            "Prospect réceptif et prêt à recevoir rappel."
+        ],
+        "analyse_agent": [
+            "Introduction claire et rassurante. || Bonne intro et ton poli; obtention d'informations utiles.",
+            "Collecte complète des informations techniques et personnelles.|| Peu d'effort pour creuser le frein réel (coût / esthétique / temps). ",
+            "Gestion des objections liée aux expériences précédentes très bonne, ton rassurant || Banalisation de l'objection — pas de validation émotionnelle.",
+            "Prospect attentif et réceptif à l’étude proposée."
+        ],
+        "recommandations_qualiticien": [
+            "Marquer la fiche : Valide. || Marquer la fiche: A retravailler",
+            "Rassurer prospect sur fiabilité du programme éco-financé et suivi des aides. || Former l'agent sur la technique: valider l'objection avant relance et poser questions ouvertes.",
+            "Confirmer l’espace toiture lors du rappel du conseiller. || Former l’agent à valider les objections méfiance + revenu"
+        ]
+    
+        - Répondre en JSON valide uniquement.
 
     Transcription à analyser :
     \"\"\"
