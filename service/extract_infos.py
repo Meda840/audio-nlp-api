@@ -133,7 +133,7 @@ def extract_infos_from_text(transcript: str) -> dict:
             "Prospect réceptif et prêt à recevoir rappel."
         ],
         "analyse_agent": [
-            "Introduction claire et rassurante. || Bonne intro et ton poli; obtention d'informations utiles.",
+            "Introduction claire et rassurante. || Bonne intro et ton poli obtention d'informations utiles.",
             "Collecte complète des informations techniques et personnelles.|| Peu d'effort pour creuser le frein réel (coût / esthétique / temps). ",
             "Gestion des objections liée aux expériences précédentes très bonne, ton rassurant || Banalisation de l'objection — pas de validation émotionnelle.",
             "Prospect attentif et réceptif à l’étude proposée."
