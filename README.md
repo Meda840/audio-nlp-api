@@ -22,6 +22,7 @@ Ce projet est une API Python développée avec **FastAPI** qui permet de :
 
 ## 🏗️ Architecture du projet
 
+<pre> ```
 📂 audio-nlp-api/
 ├── main.py                     # Point d'entrée FastAPI
 ├── service/
@@ -37,7 +38,7 @@ Ce projet est une API Python développée avec **FastAPI** qui permet de :
 ├── .env                        # Clés API et URL backend PHP
 ├── requirements.txt            # Dépendances Python
 └── README.md
-
+``` </pre>
 
 ---
 
