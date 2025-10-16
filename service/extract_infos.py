@@ -48,7 +48,7 @@ def extract_infos_from_text(transcript: str) -> dict:
     - Remplir les champs demandés ci-dessous avec les valeurs attendues
 
      ## Règles pour le commentaire_suggestion_ia :
-    - Toujours suivre cet ordre et séparateur " / " :
+    - Toujours suivre cet ordre et séparateur " // " :
       script ok / verrouillage ok / proprietaire oui/non / facture (montant ou estimation) / superficie (m²) / toit (type) / orientation / espace_20m2 / age_mr / age_mme / activite_mr / activite_mme / revenu / Q_interet / adresse / note / observation
     - Si une information est absente → mettre "-"
     - Ne rien inventer, se baser uniquement sur la transcription
@@ -101,13 +101,12 @@ def extract_infos_from_text(transcript: str) -> dict:
     - creneau_rappel : si le client donne une préférence (matin, après-midi…)
     - heure_rappel : si une heure précise est mentionnée
     - commentaire_suggestion_ia : suivre Règles pour le commentaire_suggestion_ia et les exemples donnés
-    - score_interet : valeur entre 0 et 5
-    - classement : "Valide" / "A retravailler" / "Non intéressant"
+    - score_interet : valeur entre 0 et 10
+    - classement : "Valide"  / "Non intéressant"
     - interet_exprime : texte synthèse intérêt prospect
     - disponibilite : "Oui"/"Non"
-    - infos_collectees : texte résumé des infos collectées
+    - entretien : le prospect est Mme ou Mr
     - objections : texte résumé objections ou freins
-    - extraits_pertinents : liste de citations pertinentes du transcript
     - analyse_agent : liste des points observés sur l’agent
     - recommandations_qualiticien : liste des recommandations pour le qualiticien
      Astuce pour toi :
@@ -120,30 +119,51 @@ def extract_infos_from_text(transcript: str) -> dict:
     - Si le client confirme l’adresse telle que dite → `adresse_modifiee = 0`.
     ## Exemple de sortie attendue :
     
-        "score_interet": "4.0 / 5",
-        "classement": "Valide",
-        "interet_exprime": "Intéressé par projet éco-financé, attentif aux détails || Réceptive, souhaite vérifier faisabilité",
-        "disponibilite": "Prêt à être rappelé par conseiller || Accepte d’être rappelée — mais méfiante",
-        "infos_collectees": "Maison 90 m², chauffage électrique, orientation Est, espace toiture ~20 m² dégagé, facture >100 €, 2 niveaux",
-        "objections": "Conflit antérieur avec pompe à chaleur / primes d'État → rassurer sur fiabilité || Pas intéressés / pas envie de répondre",
-        "extraits_pertinents": [
-            "Facture >100€/mois, maison 90 m², chauffage électrique, orientation Est.",
-            "Espace toiture ~20 m² dégagé, sans velux, sans ombrage.",
-            "Préoccupation antérieure sur primes pompe à chaleur → ton rassurant.",
-            "Prospect réceptif et prêt à recevoir rappel."
-        ],
+        "score_interet": "8.0 / 10",
+        "classement": Le classement finale doit être soit "Valide" soit "Non intéressant".
+        - Attribuer la valeur **"Non intéressant" uniquement si** :
+            Le prospect **n’est pas propriétaire**.
+            Le logement **n’est pas une maison individuelle**.
+            Le prospect **refuse clairement l’étude** ou met fin à l’appel en refusant le projet.
+        - Dans tous les autres cas (même si certaines informations sont manquantes ou partielles), **classer en "Valide"**.
+        - Ne pas classer en "Non intéressant" pour des motifs ambigus ou des informations incertaines.
+        "interet_exprime": "Intéressé par projet éco-financé, attentif aux détails / Réceptive, souhaite vérifier faisabilité",
+        "disponibilite": "Prêt à être rappelé par conseiller / Accepte d’être rappelée — mais méfiante",
+        "objections": "Conflit antérieur avec pompe à chaleur / primes d'État → rassurer sur fiabilité / Pas intéressés / pas envie de répondre",
+        "analyse_agent":
+        - Évaluer la qualité de l'introduction (ton, clarté, rassurance).
+        - Vérifier si l’agent suit les étapes clés du script :
+            - a. Présentation et rassurance initiale.  
+            - b. Vérification du statut de propriétaire.  
+            - c. Récupération complète de l’adresse (numéro, rue, ville, code postal).  
+            - d. Question sur la toiture (type, orientation, surface 20m).  
+            - e. Gestion des objections éventuelles (financières, expériences passées, réticences).  
+            - f. **Vérrouillage de l’appel** : l’agent doit confirmer avec le prospect son accord pour l’étude, **valider l’adresse** et **le nom complet** avant la clôture de l’appel.
+        - Si l’agent **omet une ou plusieurs de ces étapes**, lister **clairement quelles informations sont manquantes** ou quelles étapes n’ont pas été respectées.
+        - Si l’agent suit correctement toutes les étapes, mentionner positivement ce respect du script.
+        Exemples de bonnes analyses
         "analyse_agent": [
-            "Introduction claire et rassurante. || Bonne intro et ton poli obtention d'informations utiles.",
-            "Collecte complète des informations techniques et personnelles.|| Peu d'effort pour creuser le frein réel (coût / esthétique / temps). ",
-            "Gestion des objections liée aux expériences précédentes très bonne, ton rassurant || Banalisation de l'objection — pas de validation émotionnelle.",
-            "Prospect attentif et réceptif à l’étude proposée."
+            "Script respecté dans son intégralité, ton rassurant, verrouillage d'appel bien effectué.",
+            "Introduction claire et rassurante. Bonne intro et ton poli obtention d'informations utiles.",
+            "Collecte complète des informations techniques et personnelles. Peu d'effort pour creuser le frein réel (coût / esthétique / temps). ",
+            "Gestion des objections liée aux expériences précédentes très bonne. Banalisation de l'objection — pas de validation émotionnelle.",
+            "Agent n’a pas posé de question sur l’orientation de la toiture."
         ],
-        "recommandations_qualiticien": [
-            "Marquer la fiche : Valide. || Marquer la fiche: A retravailler",
-            "Rassurer prospect sur fiabilité du programme éco-financé et suivi des aides. || Former l'agent sur la technique: valider l'objection avant relance et poser questions ouvertes.",
-            "Confirmer l’espace toiture lors du rappel du conseiller. || Former l’agent à valider les objections méfiance + revenu"
+        "recommandations_qualiticien" :
+        - Fournir uniquement des recommandations factuelles et utiles pour faciliter la prise de décision humaine.
+        - Ne **pas** donner d’instruction directe telle que « Marquer la fiche : Valide / A retravailler ».
+        - Exemples de bonnes recommandations : [ 
+            "Prospect attentif et réceptif à l’étude proposée.",
+            "Confirmer l’espace toiture et l’orientation lors du rappel.",
+            "Rassurer le prospect sur la faisabilité financière du projet.",
+            "Valider les objections liées aux expériences passées.",
+            "Vérifier la cohérence entre adresse donnée et orientation du toit.",
+             Si le numéro, la rue ou la ville de l’adresse est manquant, incomplet ou le prospect ne souhaite pas donner son adresse ajouter : 
+            "Vérifier ou confirmer l’adresse exacte avec le prospect (numéro, rue, ville).",
+            Si les champs toiture, orientation ou espace_toit_20m2 sont vides ou ambigus, ajouter :
+            "Vérifier les informations techniques manquantes (toiture, orientation, espace disponible)."
         ]
-    
+      
         - Répondre en JSON valide uniquement.
 
     Transcription à analyser :

@@ -1,3 +1,47 @@
+"""
+===============================================================
+ Fichier        : main.py
+ Auteur         : Mohamed-Amine ELGAOUZI
+ Description    : API FastAPI principale pour :
+                  - Téléchargement de fichiers audio depuis une URL
+                  - Nettoyage audio (suppression des silences)
+                  - Transcription audio (AssemblyAI)
+                  - Extraction d'informations via OpenAI
+                  - Envoi automatique des données extraites vers backend PHP
+                  Utilise BackgroundTasks pour traitement asynchrone.
+ Créé le        : 15/10/2025
+ Dernière maj   : 16/10/2025
+===============================================================
+ Dépendances    :
+ - requests
+ - fastapi
+ - pydantic
+ - dotenv
+ - os
+ - traceback
+ - service.download
+ - service.convert
+ - service.transcribe
+ - service.transcribeAssembly
+ - service.extract_infos
+ - utils.silence_trimmer
+
+ Fonctionnalités clés :
+ - Endpoint GET /health pour vérifier l'état de l'API
+ - Endpoint POST /process pour lancer le traitement audio
+ - Téléchargement de l'audio
+ - Nettoyage automatique des silences
+ - Transcription via AssemblyAI
+ - Extraction et structuration des informations
+ - Envoi des résultats au backend PHP défini dans .env
+ - Gestion des erreurs et logging console
+
+ Notes :
+ - Les variables d'environnement doivent être définies dans le fichier .env
+ - Le traitement est lancé en Background pour ne pas bloquer l'API
+===============================================================
+"""
+
 import requests
 from fastapi import FastAPI, HTTPException, BackgroundTasks
 from pydantic import BaseModel
@@ -24,39 +68,6 @@ def health_check():
 class DownloadRequest(BaseModel):
     fiche_id: int
     audio_url: str
-
-@app.post("/download")
-def download_file(request: DownloadRequest):
-    fiche_id = request.fiche_id
-    url = request.audio_url
-    filename = f"{fiche_id}_audiotranscribed"
-    
-    # Step 1: Download
-    raw_path = download_audio(url, filename)
-    # Step 2: Convert
-    wav_path = convert_to_wav(raw_path, filename)
-    # Step 3: Transcribe
-    #transcript_path = transcribe_audio(filename)
-    transcript_path = transcribe_with_assemblyai(filename)
-
-    # Step 4: Lire le fichier texte
-    with open(transcript_path, "r", encoding="utf-8") as f:
-        transcript_text = f.read()
-    print("Calling Open AI API to extract info")
-    # Step 5: Envoyer à OpenAI pour extraction des infos
-    extracted_infos = extract_infos_from_text(transcript_text)
-    print("Sending Data to PHP server ")
-    # Step 6: Send to PHP backend
-    backend_response = send_ai_data_to_php(fiche_id, extracted_infos)
-
-    # Step 7: Return summary
-    return {
-        "status": "success",
-        "fiche_id": fiche_id,
-        "filename": filename,
-        "extracted_infos": extracted_infos,
-        "backend_response": backend_response,
-    }
 
 # ✅ Extract data and send to php server
 def send_ai_data_to_php(fiche_id: int, extracted_data: dict) -> dict:
@@ -101,7 +112,6 @@ def send_ai_data_to_php(fiche_id: int, extracted_data: dict) -> dict:
         "disponibilite": extracted_data.get("disponibilite", None),
         "infos_collectees": extracted_data.get("infos_collectees", None),
         "objections": extracted_data.get("objections", None),
-        "extraits_pertinents": extracted_data.get("extraits_pertinents", None),
         "analyse_agent": extracted_data.get("analyse_agent", None),
         "recommandations_qualiticien": extracted_data.get("recommandations_qualiticien", None),
 
@@ -128,10 +138,7 @@ def process_fiche_in_background(fiche_id: int, audio_url: str):
         raw_path = download_audio(audio_url, filename)
         print(raw_path)
 
-        # Step 2: Convert to WAV
-        #wav_path = convert_to_wav(raw_path, filename)
-
-        # Step 2.1 : trim audio to cut when audio is silenced
+        # Step 2 : trim audio to cut when audio is silenced
         wave_path = trim_silence(raw_path)
 
         # Step 3: Transcribe

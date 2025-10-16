@@ -1,4 +1,30 @@
-# Install the assemblyai package by executing the command "pip install assemblyai"
+"""
+===============================================================
+ Fichier        : transcribeAssembly.py
+ Auteur         : Mohamed-Amine ELGAOUZI
+ Description    : Transcrit des fichiers audio WAV en texte 
+                  en utilisant l'API AssemblyAI.
+                  Le transcript est sauvegardé dans 'data/transcripts'.
+ Créé le        : 16/10/2025
+ Dernière maj   : 16/10/2025
+===============================================================
+ Dépendances    :
+ - os
+ - assemblyai
+ - dotenv
+
+ Fonctionnalités clés :
+ - Transcription de fichiers WAV en français
+ - Détection des locuteurs (speaker_labels)
+ - Punctuation automatique et formatage du texte
+ - Gestion des erreurs et retour de l'exception en cas d'échec
+ - Sauvegarde des transcriptions dans un dossier dédié
+
+ Notes :
+ - Le fichier doit être préalablement traité dans (silence_trimmer.py) 
+   et présent dans 'data/audio/processed'.
+===============================================================
+"""
 import os
 import assemblyai as aai
 from dotenv import load_dotenv

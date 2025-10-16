@@ -1,3 +1,28 @@
+"""
+===============================================================
+ Fichier        : file_cleanup.py
+ Auteur         : Mohamed-Amine ELGAOUZI
+ Description    : Supprime automatiquement les fichiers audio
+                  anciens dans les dossiers 'raw' et 'processed'.
+                  Utilisé en tâche cron pour maintenir le stockage propre.
+ Créé le        : 15/10/2025
+ Dernière maj   : 16/10/2025
+===============================================================
+ Dépendances    :
+ - os
+ - logging
+ - datetime
+
+ Fonctionnalités clés :
+ - Parcourt les dossiers audio
+ - Supprime les fichiers plus vieux que 2 heures
+ - Log chaque suppression ou erreur dans un fichier de log
+
+ Notes :
+ - Ce script est exécuté via une tâche cron toutes les soirs.
+===============================================================
+"""
+
 import os
 import logging
 from datetime import datetime, timedelta
