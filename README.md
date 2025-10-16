@@ -23,20 +23,21 @@ Ce projet est une API Python développée avec **FastAPI** qui permet de :
 ## 🏗️ Architecture du projet
 
 📂 audio-nlp-api/
-├── main.py # Point d'entrée FastAPI
+├── main.py                     # Point d'entrée FastAPI
 ├── service/
-│ ├── download.py # Téléchargement des fichiers audio
-│ ├── convert.py # Conversion audio MP3 a WAV (non utilisé car WAV disponible)
-│ ├── transcribe.py # Transcription locale (plus lent)
-│ ├── transcribeAssembly.py # Transcription via AssemblyAI (rapide)
-│ ├── extract_infos.py # Extraction d'informations via OpenAI API
+│   ├── download.py             # Téléchargement des fichiers audio
+│   ├── convert.py              # Conversion audio MP3 a WAV (non utilisé car WAV disponible)
+│   ├── transcribe.py           # Transcription locale (plus lent)
+│   ├── transcribeAssembly.py   # Transcription via AssemblyAI (rapide)
+│   └── extract_infos.py        # Extraction d'informations via OpenAI API
 ├── utils/
-│ ├── silence_trimmer.py # Suppression des silences audio
-│ └── file_cleanup.py # Executé via cron pour la Suppression automatique des fichiers audio 
-├── logs/ # Logs des tâches automatiques cron
-├── .env # Clés API et URL backend PHP
-├── requirements.txt # Dépendances Python
-└── README.md 
+│   ├── silence_trimmer.py      # Suppression des silences audio
+│   └── file_cleanup.py         # Cron pour suppression automatique des fichiers audio
+├── logs/                       # Logs des tâches automatiques cron
+├── .env                        # Clés API et URL backend PHP
+├── requirements.txt            # Dépendances Python
+└── README.md
+
 
 ---
 
