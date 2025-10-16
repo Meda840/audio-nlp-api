@@ -61,7 +61,7 @@ pip install -r requirements.txt
 
 ASSEMBLYAI_API_KEY=cle_assemblyai
 OPENAI_API_KEY=cle_openai
-php_api_url=http://serveur-php.com/endpoint.php/fiche_ai_data_post.php
+php_api_url=http://serveur-php.com/fiche_ai_data_post.php
 
 ### ▶️ Lancer le serveur FastAPI
 
@@ -110,58 +110,4 @@ Un script `utils/file_cleanup.py` est exécuté automatiquement chaque soir via 
 
 ```
 
-flowchart TD
-    A[📥 Requête POST /process] --> B[⬇️ Télécharger audio (download_audio)]
-    B --> C[🔊 Nettoyage silence (trim_silence)]
-    C --> D{💻 Transcription}
-    D -->|Rapide| E[📝 AssemblyAI (transcribe_with_assemblyai)]
-    D -->|Local| F[📝 faster-whisper (transcribe_audio)]
-    E --> G[📄 Lecture transcription]
-    F --> G
-    G --> H[🤖 Extraction infos OpenAI (extract_infos_from_text)]
-    H --> I[📡 Envoi données au serveur PHP (send_ai_data_to_php)]
-    I --> J[✅ Terminé, logs console]
-    
-    subgraph Background
-        B
-        C
-        D
-        E
-        F
-        G
-        H
-        I
-    end
 
-    style Background fill:#f9f,stroke:#333,stroke-width:1px,fill-opacity:0.05
-
-
-flowchart TD
-    style A fill:#FFD700,stroke:#333,stroke-width:1px
-    style B fill:#87CEFA,stroke:#333,stroke-width:1px
-    style C fill:#98FB98,stroke:#333,stroke-width:1px
-    style D fill:#FFB6C1,stroke:#333,stroke-width:1px
-    style E fill:#FF6347,stroke:#333,stroke-width:1px
-    style F fill:#8A2BE2,stroke:#333,stroke-width:1px
-
-    A[📥 **POST /process**<br>Requête client] --> B[⬇️ **Téléchargement audio**<br>download_audio]
-    B --> C[🔊 **Nettoyage silences**<br>trim_silence]
-    C --> D{💻 **Transcription**}
-    D -->|🌐 Rapide| E[📝 **AssemblyAI**<br>transcribe_with_assemblyai]
-    D -->|💻 Local| F[📝 **faster-whisper**<br>transcribe_audio]
-    E --> G[📄 **Lecture transcription**]
-    F --> G
-    G --> H[🤖 **Extraction infos**<br>extract_infos_from_text]
-    H --> I[📡 **Envoi au PHP**<br>send_ai_data_to_php]
-    I --> J[✅ **Terminé**<br>Logs et retour status]
-
-    subgraph Background["⚡ BackgroundTasks"]
-        B
-        C
-        D
-        E
-        F
-        G
-        H
-        I
-    end
