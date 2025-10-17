@@ -67,9 +67,9 @@ ASSEMBLYAI_API_KEY=cle_assemblyai
 OPENAI_API_KEY=cle_openai
 php_api_url=http://serveur-php.com/fiche_ai_data_post.php
 
-### ▶️ Lancer le serveur FastAPI
+### ▶️ Lancer le serveur FastAPI en mode Developement
 
-uvicorn main:app --host 0.0.0.0 --port 8000
+uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 
 ```
 
