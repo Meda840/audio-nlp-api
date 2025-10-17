@@ -57,6 +57,8 @@ venv\Scripts\activate      # Windows
 
 ### 3. Installer les dépendances
 
+apt update
+apt install -y build-essential python3-dev
 pip install -r requirements.txt
 
 ### 4. Créer le fichier .env
@@ -70,6 +72,64 @@ php_api_url=http://serveur-php.com/fiche_ai_data_post.php
 uvicorn main:app --host 0.0.0.0 --port 8000
 
 ```
+
+## 🖥️ Déploiement & Service Systemd
+Pour exécuter l'API en production et assurer qu'elle redémarre automatiquement en cas de crash, nous utilisons **systemd**.
+### 1️⃣ Création du fichier de service
+
+Créer un fichier `/etc/systemd/system/audio-nlp-api.service` :
+```ini
+[Unit]
+Description=Audio NLP API - FastAPI/Uvicorn Service
+After=network.target
+
+[Service]
+User=m.elgaouzi
+Group=m.elgaouzi
+#Project working directory
+WorkingDirectory=/home/m.elgaouzi/audio-nlp-api
+#Path to virtual environment & app start command
+ExecStart=/home/m.elgaouzi/audio-nlp-api/venv/bin/uvicorn main:app --host 0.0.0.0 --port 8000
+#Restart on failure
+Restart=always
+RestartSec=5
+#Environment variables
+Environment="PYTHONUNBUFFERED=1"
+EnvironmentFile=/home/m.elgaouzi/audio-nlp-api/.env
+
+[Install]
+WantedBy=multi-user.target
+```
+
+### 2️⃣ Commandes utiles systemd
+
+``` bash
+#Recharger les services après modification 
+sudo systemctl daemon-reload
+
+#Démarrer le service
+sudo systemctl start audio-nlp-api
+
+#Activer le service au démarrage du serveur
+sudo systemctl enable audio-nlp-api
+
+#Vérifier le statut du service
+sudo systemctl status audio-nlp-api
+
+#Arrêter le service
+sudo systemctl stop audio-nlp-api
+```
+### 3️⃣ Notes
+
+Le service tourne sous l'utilisateur m.elgaouzi pour plus de sécurité (éviter root en production).
+
+Restart=always permet au serveur de redémarrer automatiquement en cas de crash.
+
+Les logs peuvent être consultés via :
+``` bash
+journalctl -u audio-nlp-api -f 
+```
+
 
 ### Requirements
 
